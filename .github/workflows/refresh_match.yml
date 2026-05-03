@@ -1,0 +1,21 @@
+name: Force Refresh Match
+on: workflow_dispatch
+
+jobs:
+  refresh:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: bundle install
+      - name: Run match force
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          GIT_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+        run: |
+          bundle exec fastlane match appstore --force \
+            --app_identifier "ru.artpancreas.***.FreeAPS.watchkitapp" \
+            --readonly false
