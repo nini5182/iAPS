@@ -13,11 +13,13 @@ jobs:
       - name: Run match force
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_PAT }}
           APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.FASTLANE_KEY }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.FASTLANE_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.FASTLANE_ISSUER_ID }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          encoded=$(echo -n "nini5182:$GH_PAT" | base64)
           bundle _2.7.2_ exec fastlane match appstore --force \
             --app_identifier "ru.artpancreas.***.FreeAPS.watchkitapp" \
-            --readonly false
+            --readonly false \
+            --git_basic_authorization "$encoded"
