@@ -318,4 +318,25 @@ platform :ios do
     new_certificate_needed_content = File.read(file_path)
     puts "Certificate creation or renewal needed: #{new_certificate_needed_content}"
   end
+desc "Force refresh match for Watch app"
+lane :refresh_watch_match do
+  setup_ci if ENV['CI']
+  ENV["MATCH_READONLY"] = false.to_s
+  
+  app_store_connect_api_key(
+    key_id: "#{FASTLANE_KEY_ID}",
+    issuer_id: "#{FASTLANE_ISSUER_ID}",
+    key_content: "#{FASTLANE_KEY}"
+  )
+  
+  match(
+    type: "appstore",
+    readonly: false,
+    force: true,
+    git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
+    app_identifier: [
+      "#{APP_IDENTIFIER}.watchkitapp"
+    ]
+  )
+end
 end
