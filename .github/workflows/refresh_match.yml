@@ -13,10 +13,10 @@ jobs:
       - name: Run match force
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
-          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_PAT }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.FASTLANE_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.FASTLANE_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.FASTLANE_ISSUER_ID }}
         run: |
           bundle _2.7.2_ exec fastlane match appstore --force \
             --app_identifier "ru.artpancreas.***.FreeAPS.watchkitapp" \
