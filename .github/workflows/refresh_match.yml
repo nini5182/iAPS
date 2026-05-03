@@ -13,30 +13,15 @@ jobs:
       - name: Run match force
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.FASTLANE_KEY }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_PAT }}
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.FASTLANE_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.FASTLANE_ISSUER_ID }}
-          GH_PAT: ${{ secrets.GH_PAT }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.FASTLANE_KEY }}
           TEAMID: ${{ secrets.TEAMID }}
         run: |
-          encoded=$(echo -n "nini5182:$GH_PAT" | base64)
-
-          # Écrire la clé .p8 dans un fichier séparé
-          echo "$APP_STORE_CONNECT_API_KEY_KEY" > /tmp/api_key.p8
-
-          cat > /tmp/api_key.json << EOF
-          {
-            "key_id": "$APP_STORE_CONNECT_API_KEY_KEY_ID",
-            "issuer_id": "$APP_STORE_CONNECT_API_KEY_ISSUER_ID",
-            "key_filepath": "/tmp/api_key.p8",
-            "in_house": false
-          }
-          EOF
-
-          bundle _2.7.2_ exec fastlane run match \
-            type:appstore \
-            app_identifier:"ru.artpancreas.7HWULNV59K.FreeAPS.watchkitapp" \
-            git_basic_authorization:"$encoded" \
-            readonly:false \
-            force:true \
-            api_key_path:"/tmp/api_key.json"
+          encoded=$(echo -n "nini5182:$MATCH_GIT_BASIC_AUTHORIZATION" | base64)
+          export MATCH_GIT_BASIC_AUTHORIZATION="$encoded"
+          bundle _2.7.2_ exec fastlane match appstore \
+            --app_identifier "ru.artpancreas.7HWULNV59K.FreeAPS.watchkitapp" \
+            --readonly false \
+            --force true
