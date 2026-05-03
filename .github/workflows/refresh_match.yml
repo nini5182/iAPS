@@ -17,9 +17,8 @@ jobs:
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.FASTLANE_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.FASTLANE_ISSUER_ID }}
           GH_PAT: ${{ secrets.GH_PAT }}
+          TEAMID: ${{ secrets.TEAMID }}
         run: |
           encoded=$(echo -n "nini5182:$GH_PAT" | base64)
-          bundle _2.7.2_ exec fastlane match appstore --force \
-            --app_identifier "ru.artpancreas.***.FreeAPS.watchkitapp" \
-            --readonly false \
-            --git_basic_authorization "$encoded"
+          bundle _2.7.2_ exec fastlane run match \
+            type:appstor
