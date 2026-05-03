@@ -12,16 +12,11 @@ jobs:
         run: bundle _2.7.2_ install
       - name: Run match force
         env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GH_PAT }}
-          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.FASTLANE_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.FASTLANE_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.FASTLANE_KEY }}
           TEAMID: ${{ secrets.TEAMID }}
-        run: |
-          encoded=$(echo -n "nini5182:$MATCH_GIT_BASIC_AUTHORIZATION" | base64)
-          export MATCH_GIT_BASIC_AUTHORIZATION="$encoded"
-          bundle _2.7.2_ exec fastlane match appstore \
-            --app_identifier "ru.artpancreas.7HWULNV59K.FreeAPS.watchkitapp" \
-            --readonly false \
-            --force true
+          GH_PAT: ${{ secrets.GH_PAT }}
+          FASTLANE_KEY: ${{ secrets.FASTLANE_KEY }}
+          FASTLANE_KEY_ID: ${{ secrets.FASTLANE_KEY_ID }}
+          FASTLANE_ISSUER_ID: ${{ secrets.FASTLANE_ISSUER_ID }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: bundle _2.7.2_ exec fastlane refresh_watch_match
