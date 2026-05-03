@@ -20,13 +20,20 @@ jobs:
           TEAMID: ${{ secrets.TEAMID }}
         run: |
           encoded=$(echo -n "nini5182:$GH_PAT" | base64)
+
+          cat > /tmp/api_key.json << EOF
+          {
+            "key_id": "$APP_STORE_CONNECT_API_KEY_KEY_ID",
+            "issuer_id": "$APP_STORE_CONNECT_API_KEY_ISSUER_ID",
+            "key": "$APP_STORE_CONNECT_API_KEY_KEY",
+            "in_house": false
+          }
+          EOF
+
           bundle _2.7.2_ exec fastlane run match \
             type:appstore \
-            app_identifier:"ru.artpancreas.***.FreeAPS.watchkitapp" \
+            app_identifier:"ru.artpancreas.7HWULNV59K.FreeAPS.watchkitapp" \
             git_basic_authorization:"$encoded" \
             readonly:false \
             force:true \
-            api_key_path:"" \
-            issuer_id:"$APP_STORE_CONNECT_API_KEY_ISSUER_ID" \
-            key_id:"$APP_STORE_CONNECT_API_KEY_KEY_ID" \
-            key:"$APP_STORE_CONNECT_API_KEY_KEY"
+            api_key_path:"/tmp/api_key.json"
